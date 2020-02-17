@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Response;
+use App\Aacms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
+use Illuminate\Support\Facades\Blade;
 
 class TemplateController extends Controller
 {
@@ -28,23 +30,20 @@ class TemplateController extends Controller
     }
     function preview(Request $request)
     {
-        
-        $res = [];
+        $rendered = '';
         $components = json_decode($request->getContent());
         $fieldParsers = [];
 
         $fieldParsers = [
             'RichText' => function () {
                 return 'rich text string';
-            },
-            'Url' => function () {
-                return 'http://url.com';
-            },
+            }
         ];
 
         function loopFields($component, $fieldParsers)
         {
             $res = [];
+
             foreach ($component->fields as $key => $field) {
                 $value = '';
                 if ($field->field == 'ForEach') {
@@ -66,13 +65,14 @@ class TemplateController extends Controller
         };
 
         foreach ($components as $component) {
+            $rawBlade = Storage::disk('components')->get($component->component.'.blade.php');
+            $rawBladeBody = YamlFrontMatter::parse($rawBlade)->body();
+            $compiledBlade = Blade::compileString($rawBladeBody);
             $values = loopFields($component, $fieldParsers);
-            $res[] = [
-                'component' => $component->component,
-                'values' => $values
-            ];
+
+            $rendered .= Aacms::render($compiledBlade, $values);
         }
 
-        return Response::json($res, 200);
+        return view('landing-page', ['rendered' => $rendered]);
     }
 }
