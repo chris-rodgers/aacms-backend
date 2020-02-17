@@ -2,11 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class TemplateController extends Controller
 {
+    function index(){
+        $res = [];
+        $components = Storage::disk('components')->files('');
+        
+        foreach ($components as $component) {
+            $content = Storage::disk('components')->get($component);
+            $name = explode(".", $component, 2)[0];
+            $object = YamlFrontMatter::parse($content);
+            $res[$name] = $object->matter();
+        }
+
+        return Response::json($res, 200);
+    }
     function preview(Request $request)
     {
         

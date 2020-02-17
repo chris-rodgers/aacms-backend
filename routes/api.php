@@ -17,4 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/preview', 'TemplateController@preview');
+Route::get('/template', 'TemplateController@index');
+Route::post('/template/preview', 'TemplateController@preview');
