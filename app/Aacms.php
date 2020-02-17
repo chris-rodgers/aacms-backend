@@ -12,10 +12,11 @@ class Aacms
     /**
      * Return a list of all components available
      */
-    public static function getComponentList(){
+    public static function getComponentList()
+    {
         $res = [];
         $components = Storage::disk('components')->files('');
-        
+
         foreach ($components as $component) {
             $content = Storage::disk('components')->get($component);
             $name = explode(".", $component, 2)[0];
@@ -26,7 +27,7 @@ class Aacms
                 'variableNames' =>  $variables[1]
             ];
         }
-        
+
         return $res;
     }
 
@@ -39,7 +40,7 @@ class Aacms
 
         $fieldParsers = [
             'RichText' => function () {
-                return 'rich text string';
+                return '';
             }
         ];
 
@@ -69,32 +70,11 @@ class Aacms
         foreach ($components as $component) {
             $rawBlade = Storage::disk('components')->get($component->component . '.blade.php');
             $rawBladeBody = YamlFrontMatter::parse($rawBlade)->body();
-            $compiledBlade = Blade::compileString($rawBladeBody);
             $values = loopFields($component, $fieldParsers);
 
-            $rendered .= Aacms::toBlade($compiledBlade, $values);
+            $rendered .=  view(['template' => $rawBladeBody], $values);
         }
 
         return $rendered;
-    }
-
-    /**
-     * Function for rendering blade files with data
-     */
-    private static function toBlade($__php, $__data)
-    {
-        $obLevel = ob_get_level();
-        ob_start();
-        extract($__data, EXTR_SKIP);
-        try {
-            eval('?' . '>' . $__php);
-        } catch (Exception $e) {
-            while (ob_get_level() > $obLevel) ob_end_clean();
-            throw $e;
-        } catch (Throwable $e) {
-            while (ob_get_level() > $obLevel) ob_end_clean();
-            throw new FatalError('Error', 0, $e);
-        }
-        return ob_get_clean();
     }
 }

@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Response;
 use App\Aacms;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
-use Illuminate\Support\Facades\Blade;
 
 class TemplateController extends Controller
 {
