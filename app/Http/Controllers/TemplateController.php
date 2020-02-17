@@ -17,7 +17,11 @@ class TemplateController extends Controller
             $content = Storage::disk('components')->get($component);
             $name = explode(".", $component, 2)[0];
             $object = YamlFrontMatter::parse($content);
-            $res[$name] = $object->matter();
+            preg_match_all('/\$(\w*-?>?\[?\'?"?\]?+)/', $object->body(), $variables);
+            $res[$name] = [
+                'fields' => $object->matter(),
+                'variableNames' =>  $variables[1]
+            ];
         }
 
         return Response::json($res, 200);
