@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "310fabd245b86cce553cdb50421cf1db",
+    "content-hash": "6003e4a15b8305adb9e11b008f7fda47",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1121,6 +1121,48 @@
                 "type"
             ],
             "time": "2019-12-15T19:35:24+00:00"
+        },
+        {
+            "name": "prezly/draft-php",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prezly/draft-php.git",
+                "reference": "4731fdf286c8d7981b9d655d440c449e56b508b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prezly/draft-php/zipball/4731fdf286c8d7981b9d655d440c449e56b508b4",
+                "reference": "4731fdf286c8d7981b9d655d440c449e56b508b4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.6",
+                "prezly/code-style": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Prezly\\DraftPhp\\": "./lib",
+                    "Prezly\\DraftPhp\\Tests\\": "./tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Voskoboinyk",
+                    "email": "ivan.voskoboinyk@gmail.com"
+                }
+            ],
+            "description": "PHP implementation of Draft.js ContentState model to allow server-side handling of Draft.js produced content.",
+            "time": "2017-03-23T15:48:30+00:00"
         },
         {
             "name": "psr/container",

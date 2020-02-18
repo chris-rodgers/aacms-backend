@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Symfony\Component\ErrorHandler\Error\FatalError;
 use Illuminate\Support\Facades\Storage;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
-use Illuminate\Support\Facades\Blade;
+use App\Converter;
+use Prezly\DraftPhp\Converter as DraftConverter;
 
 class Aacms
 {
@@ -39,9 +39,23 @@ class Aacms
         $rendered = '';
 
         $fieldParsers = [
-            'RichText' => function () {
-                return '';
-            }
+            'RichText' => function ($v) {
+                $res = '';
+                $contentState = DraftConverter::convertFromJson(json_encode($v));
+                $converter = new Converter;
+                try {
+                    $res = $converter
+                        ->setState($contentState)
+                        ->toHtml();
+                } catch (\Throwable $th) {
+                    // Do nothing
+                }
+                return $res;
+            },
+            // 'Markdown' => function ($v) {
+            //     $Parsedown = new Parsedown();
+            //     return $Parsedown->line($v);
+            // }
         ];
 
         function loopFields($component, $fieldParsers)
